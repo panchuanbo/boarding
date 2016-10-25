@@ -1,3 +1,5 @@
+require 'sparkpost'
+
 class InviteController < ApplicationController
   before_action :set_app_details
   before_action :check_disabled_text
@@ -100,6 +102,10 @@ class InviteController < ApplicationController
           @message = t(:message_success_pending)
         end
         @type = "success"
+
+        sp = SparkPost::Client.new(ENV['SPARKPOST_API_KEY'])
+        response = sp.transmission.send_message('support@swurvapp.com', 'postmaster@panchuanbo.com', 'TestFlight Registration', "Added new tester: #{email} - #{first_name} #{last_name}")
+        puts response
       end
       
     rescue => ex
